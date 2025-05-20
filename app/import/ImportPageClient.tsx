@@ -7,6 +7,7 @@ import { DealImportForm } from "@/components/import/deal-import-form"
 import { DealItemImportForm } from "@/components/import/deal-item-import-form"
 import { BudgetImportForm } from "@/components/import/budget-import-form"
 import { CostImportForm } from "@/components/import/cost-import-form"
+import { TemplateDownloadButton } from "@/components/import/template-download-button"
 import { useEffect, useState } from "react"
 
 export default function ImportPageClient() {
@@ -31,6 +32,13 @@ export default function ImportPageClient() {
         <p className="text-muted-foreground">
           Excelファイルから各種データをインポートします。テンプレートに従ってデータを準備してください。
         </p>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          <TemplateDownloadButton templateType="deals" />
+          <TemplateDownloadButton templateType="dealItems" />
+          <TemplateDownloadButton templateType="budgets" />
+          <TemplateDownloadButton templateType="costs" />
+        </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-4">
