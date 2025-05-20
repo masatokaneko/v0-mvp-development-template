@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deals     Deal[]
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  type        ProductType
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  dealItems   DealItem[]
+}
+
+model Deal {
+  id            String    @id @default(cuid())
+  name          String
+  customer      Customer  @relation(fields: [customerId], references: [id])
+  customerId    String
+  dealDate      DateTime
+  fiscalYear    Int
+  fiscalQuarter Int
+  type          DealType
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  dealItems     DealItem[]
+}
+
+model DealItem {
+  id              String        @id @default(cuid())
+  deal            Deal          @relation(fields: [dealId], references: [id])
+  dealId          String
+  product         Product       @relation(fields: [productId], references: [id])
+  productId       String
+  productName     String
+  type            ProductType
+  amountBeforeTax Decimal       @db.Decimal(10, 2)
+  amountAfterTax  Decimal       @db.Decimal(10, 2)
+  startDate       DateTime
+  endDate         DateTime
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  monthlySales    MonthlySales[]
+}
+
+model MonthlySales {
+  id           String      @id @default(cuid())
+  dealItem     DealItem    @relation(fields: [dealItemId], references: [id])
+  dealItemId   String
+  year         Int
+  month        Int
+  totalDays    Int
+  appliedDays  Int
+  dailyRate    Decimal     @db.Decimal(10, 2)
+  amount       Decimal     @db.Decimal(10, 2)
+  type         ProductType
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([dealItemId, year, month])
+}
+
+model Cost {
+  id          String      @id @default(cuid())
+  year        Int
+  month       Int
+  type        CostType
+  category    String
+  amount      Decimal     @db.Decimal(10, 2)
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([year, month, type, category])
+}
+
+model Budget {
+  id         String       @id @default(cuid())
+  year       Int
+  month      Int?
+  quarter    Int?
+  type       BudgetType
+  category   String?
+  salesType  ProductType?
+  amount     Decimal      @db.Decimal(10, 2)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@unique([year, month, quarter, type, category, salesType])
+}
+
+// ユーザー認証用モデル
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ProductType {
+  LICENSE
+  SERVICE
+}
+
+enum DealType {
+  LICENSE
+  SERVICE
+  MIXED
+}
+
+enum CostType {
+  COST_OF_SALES_LICENSE
+  COST_OF_SALES_SERVICE
+  SG_AND_A
+}
+
+enum BudgetType {
+  SALES
+  COST_OF_SALES
+  SG_AND_A
+  OPERATING_PROFIT
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
