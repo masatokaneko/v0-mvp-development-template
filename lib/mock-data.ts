@@ -1,7 +1,7 @@
 import { Decimal } from "decimal.js"
 
 // 顧客モックデータ
-export const customers = [
+export const mockCustomers = [
   { id: "cust1", name: "株式会社テクノロジー" },
   { id: "cust2", name: "株式会社イノベーション" },
   { id: "cust3", name: "株式会社デジタルソリューション" },
@@ -10,7 +10,7 @@ export const customers = [
 ]
 
 // 商品モックデータ
-export const products = [
+export const mockProducts = [
   { id: "prod1", name: "エンタープライズライセンス", type: "LICENSE", description: "企業向け基本ライセンス" },
   { id: "prod2", name: "プレミアムライセンス", type: "LICENSE", description: "高機能ライセンス" },
   { id: "prod3", name: "コンサルティングサービス", type: "SERVICE", description: "導入支援コンサルティング" },
@@ -19,7 +19,7 @@ export const products = [
 ]
 
 // 商談モックデータ
-export const deals = [
+export const mockDeals = [
   {
     id: "deal1",
     name: "株式会社テクノロジー 基本契約",
@@ -83,7 +83,7 @@ export const deals = [
 ]
 
 // 新規獲得契約アイテムモックデータ
-export const dealItems = [
+export const mockDealItems = [
   {
     id: "item1",
     dealId: "deal1",
@@ -182,7 +182,7 @@ export const generateMonthlySales = () => {
   const monthlySales = []
 
   // 各契約アイテムに対して月次按分売上を生成
-  for (const item of dealItems) {
+  for (const item of mockDealItems) {
     const startDate = new Date(item.startDate)
     const endDate = new Date(item.endDate)
 
@@ -251,10 +251,10 @@ export const generateMonthlySales = () => {
   return monthlySales
 }
 
-export const monthlySales = generateMonthlySales()
+export const mockMonthlySales = generateMonthlySales()
 
 // 費用モックデータ
-export const costs = [
+export const mockCosts = [
   // ライセンス原価
   {
     id: "cost1",
@@ -490,7 +490,7 @@ export const costs = [
 ]
 
 // 予算モックデータ
-export const budgets = [
+export const mockBudgets = [
   // 売上予算（月次）
   {
     id: "budget1",
@@ -975,3 +975,12 @@ export const budgets = [
     amount: new Decimal(3600000),
   },
 ]
+
+// 元の名前でもエクスポートする（後方互換性のため）
+export const customers = mockCustomers
+export const products = mockProducts
+export const deals = mockDeals
+export const dealItems = mockDealItems
+export const monthlySales = mockMonthlySales
+export const costs = mockCosts
+export const budgets = mockBudgets

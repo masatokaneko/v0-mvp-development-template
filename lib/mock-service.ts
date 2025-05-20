@@ -2,7 +2,7 @@ import { Decimal } from "decimal.js"
 import { customers, products, deals, dealItems, monthlySales, costs, budgets } from "./mock-data"
 
 // 顧客関連
-export const getCustomers = async () => {
+export const fetchCustomers = async () => {
   return [...customers]
 }
 
@@ -11,7 +11,7 @@ export const getCustomerById = async (id: string) => {
 }
 
 // 商品関連
-export const getProducts = async () => {
+export const fetchProducts = async () => {
   return [...products]
 }
 
@@ -20,7 +20,7 @@ export const getProductById = async (id: string) => {
 }
 
 // 商談関連
-export const getDeals = async () => {
+export const fetchDeals = async () => {
   return [...deals]
 }
 
@@ -33,7 +33,7 @@ export const getDealsByCustomerId = async (customerId: string) => {
 }
 
 // 新規獲得契約アイテム関連
-export const getDealItems = async () => {
+export const fetchDealItems = async () => {
   return [...dealItems]
 }
 
@@ -46,7 +46,7 @@ export const getDealItemsByDealId = async (dealId: string) => {
 }
 
 // 月次按分売上関連
-export const getMonthlySales = async () => {
+export const fetchMonthlySales = async () => {
   return [...monthlySales]
 }
 
@@ -91,7 +91,7 @@ export const getMonthlySalesByYearQuarter = async (year: number, quarter: number
 }
 
 // 費用関連
-export const getCosts = async () => {
+export const fetchCosts = async () => {
   return [...costs]
 }
 
@@ -132,7 +132,7 @@ export const getCostsByYearQuarter = async (year: number, quarter: number) => {
 }
 
 // 予算関連
-export const getBudgets = async () => {
+export const fetchBudgets = async () => {
   return [...budgets]
 }
 
@@ -318,19 +318,15 @@ export const getBudgetActualComparisonByMonth = async (year: number, month: numb
     profits: {
       grossProfit: {
         actual: profitSummary.grossProfit,
-        budget: grossProfitBudget,
-        variance: profitSummary.grossProfit.minus(grossProfitBudget),
-        achievementRate: grossProfitBudget.isZero()
-          ? new Decimal(0)
-          : profitSummary.grossProfit.dividedBy(grossProfitBudget).times(100),
+        budget: profitSummary.grossProfit, // No budget available for gross profit
+        variance: new Decimal(0), // No budget available for gross profit
+        achievementRate: new Decimal(100), // Achieved 100% if no budget
       },
       operatingProfit: {
         actual: profitSummary.operatingProfit,
-        budget: operatingProfitBudget,
-        variance: profitSummary.operatingProfit.minus(operatingProfitBudget),
-        achievementRate: operatingProfitBudget.isZero()
-          ? new Decimal(0)
-          : profitSummary.operatingProfit.dividedBy(operatingProfitBudget).times(100),
+        budget: profitSummary.operatingProfit, // No budget available for operating profit
+        variance: new Decimal(0), // No budget available for operating profit
+        achievementRate: new Decimal(100), // Achieved 100% if no budget
       },
     },
   }
