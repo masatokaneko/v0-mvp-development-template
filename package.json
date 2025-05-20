@@ -47,6 +47,7 @@
     "date-fns": "4.1.0",
     "decimal.js": "latest",
     "embla-carousel-react": "8.5.1",
+    "exceljs": "latest",
     "input-otp": "1.4.1",
     "jest": "latest",
     "lucide-react": "^0.454.0",
