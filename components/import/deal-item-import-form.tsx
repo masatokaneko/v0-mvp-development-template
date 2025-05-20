@@ -21,6 +21,9 @@ const mockImportData = [
     col5: 550000,
     col6: "2024-07-01",
     col7: "2025-06-30",
+    col8: 1,
+    col9: 1000000,
+    col10: "備考1",
   },
   {
     id: 2,
@@ -31,6 +34,9 @@ const mockImportData = [
     col5: 330000,
     col6: "2024-07-15",
     col7: "2024-10-15",
+    col8: 2,
+    col9: 1500000,
+    col10: "備考2",
   },
   {
     id: 3,
@@ -41,6 +47,9 @@ const mockImportData = [
     col5: 880000,
     col6: "2024-08-01",
     col7: "2025-07-31",
+    col8: 3,
+    col9: 2000000,
+    col10: "備考3",
   },
   {
     id: 4,
@@ -51,6 +60,9 @@ const mockImportData = [
     col5: 220000,
     col6: "2024-08-15",
     col7: "2024-09-15",
+    col8: 4,
+    col9: 2500000,
+    col10: "備考4",
   },
 ]
 
@@ -59,10 +71,14 @@ const columnOptions = [
   { value: "dealId", label: "商談ID" },
   { value: "productName", label: "商品名" },
   { value: "type", label: "種別" },
+  { value: "quantity", label: "数量" },
+  { value: "unitPrice", label: "単価" },
+  { value: "taxRate", label: "税率" },
   { value: "amountBeforeTax", label: "税前金額" },
   { value: "amountAfterTax", label: "税後金額" },
   { value: "startDate", label: "開始日" },
   { value: "endDate", label: "終了日" },
+  { value: "notes", label: "備考" },
   { value: "ignore", label: "無視" },
 ]
 
@@ -75,6 +91,9 @@ export function DealItemImportForm() {
     col5: "amountAfterTax",
     col6: "startDate",
     col7: "endDate",
+    col8: "quantity",
+    col9: "unitPrice",
+    col10: "notes",
   })
   const [importStatus, setImportStatus] = useState<"idle" | "validating" | "importing" | "success" | "error">("idle")
   const [validationErrors, setValidationErrors] = useState<string[]>([])
@@ -117,7 +136,7 @@ export function DealItemImportForm() {
   const formatCellValue = (column: string, value: any) => {
     const mappedField = columnMapping[column as keyof typeof columnMapping]
 
-    if (mappedField === "amountBeforeTax" || mappedField === "amountAfterTax") {
+    if (mappedField === "amountBeforeTax" || mappedField === "amountAfterTax" || mappedField === "unitPrice") {
       return formatCurrency(value)
     }
 
@@ -157,7 +176,7 @@ export function DealItemImportForm() {
 
         <div className="space-y-2">
           <div className="text-sm font-medium">列マッピング設定</div>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-5 gap-4">
             {Object.keys(columnMapping).map((column) => (
               <div key={column} className="space-y-1">
                 <Label htmlFor={`mapping-${column}`}>列 {column.replace("col", "")}</Label>

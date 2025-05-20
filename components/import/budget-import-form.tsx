@@ -22,6 +22,7 @@ const mockImportData = [
     col5: null,
     col6: "LICENSE",
     col7: 800000,
+    col8: "1月ライセンス売上予算",
   },
   {
     id: 2,
@@ -30,8 +31,9 @@ const mockImportData = [
     col3: null,
     col4: "SALES",
     col5: null,
-    col6: "LICENSE",
+    col6: "SERVICE",
     col7: 850000,
+    col8: "2月サービス売上予算",
   },
   {
     id: 3,
@@ -42,6 +44,7 @@ const mockImportData = [
     col5: "ライセンス原価",
     col6: null,
     col7: 240000,
+    col8: "Q1ライセンス原価予算",
   },
   {
     id: 4,
@@ -52,6 +55,7 @@ const mockImportData = [
     col5: "サービス原価",
     col6: null,
     col7: 180000,
+    col8: "Q2サービス原価予算",
   },
   {
     id: 5,
@@ -62,6 +66,7 @@ const mockImportData = [
     col5: null,
     col6: null,
     col7: 3600000,
+    col8: "年間営業利益予算",
   },
 ]
 
@@ -74,6 +79,7 @@ const columnOptions = [
   { value: "category", label: "カテゴリ" },
   { value: "salesType", label: "売上種別" },
   { value: "amount", label: "金額" },
+  { value: "notes", label: "備考" },
   { value: "ignore", label: "無視" },
 ]
 
@@ -86,6 +92,7 @@ export function BudgetImportForm() {
     col5: "category",
     col6: "salesType",
     col7: "amount",
+    col8: "notes",
   })
   const [importStatus, setImportStatus] = useState<"idle" | "validating" | "importing" | "success" | "error">("idle")
   const [validationErrors, setValidationErrors] = useState<string[]>([])

@@ -19,6 +19,8 @@ const mockImportData = [
     col4: "LICENSE",
     col5: "2024",
     col6: "Q2",
+    col7: "山田太郎",
+    col8: "重要顧客",
   },
   {
     id: 2,
@@ -28,6 +30,8 @@ const mockImportData = [
     col4: "SERVICE",
     col5: "2024",
     col6: "Q2",
+    col7: "佐藤次郎",
+    col8: "新規顧客",
   },
   {
     id: 3,
@@ -37,28 +41,34 @@ const mockImportData = [
     col4: "MIXED",
     col5: "2024",
     col6: "Q3",
+    col7: "鈴木三郎",
+    col8: "継続顧客",
   },
 ]
 
 // 列マッピングオプション
 const columnOptions = [
-  { value: "name", label: "商談名" },
+  { value: "dealName", label: "商談名" },
   { value: "customerName", label: "顧客名" },
   { value: "dealDate", label: "商談日" },
   { value: "type", label: "種別" },
   { value: "fiscalYear", label: "会計年度" },
   { value: "fiscalQuarter", label: "四半期" },
+  { value: "assignedTo", label: "担当者" },
+  { value: "notes", label: "備考" },
   { value: "ignore", label: "無視" },
 ]
 
 export function DealImportForm() {
   const [columnMapping, setColumnMapping] = useState({
-    col1: "name",
+    col1: "dealName",
     col2: "customerName",
     col3: "dealDate",
     col4: "type",
     col5: "fiscalYear",
     col6: "fiscalQuarter",
+    col7: "assignedTo",
+    col8: "notes",
   })
   const [importStatus, setImportStatus] = useState<"idle" | "validating" | "importing" | "success" | "error">("idle")
   const [validationErrors, setValidationErrors] = useState<string[]>([])
@@ -130,7 +140,7 @@ export function DealImportForm() {
 
         <div className="space-y-2">
           <div className="text-sm font-medium">列マッピング設定</div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             {Object.keys(columnMapping).map((column) => (
               <div key={column} className="space-y-1">
                 <Label htmlFor={`mapping-${column}`}>列 {column.replace("col", "")}</Label>

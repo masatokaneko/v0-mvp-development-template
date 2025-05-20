@@ -21,6 +21,10 @@ const mockImportData = [
     col4: "ライセンス原価",
     col5: 200000,
     col6: "1月ライセンス原価",
+    col7: "ベンダーA",
+    col8: "プロジェクトX",
+    col9: "経理部",
+    col10: "四半期契約",
   },
   {
     id: 2,
@@ -30,6 +34,10 @@ const mockImportData = [
     col4: "ライセンス原価",
     col5: 220000,
     col6: "2月ライセンス原価",
+    col7: "ベンダーA",
+    col8: "プロジェクトX",
+    col9: "経理部",
+    col10: "四半期契約",
   },
   {
     id: 3,
@@ -39,6 +47,10 @@ const mockImportData = [
     col4: "サービス原価",
     col5: 170000,
     col6: "3月サービス原価",
+    col7: "ベンダーB",
+    col8: "プロジェクトY",
+    col9: "開発部",
+    col10: "単発契約",
   },
   {
     id: 4,
@@ -48,6 +60,10 @@ const mockImportData = [
     col4: "人件費",
     col5: 500000,
     col6: "4月人件費",
+    col7: "",
+    col8: "",
+    col9: "人事部",
+    col10: "月次固定",
   },
   {
     id: 5,
@@ -57,6 +73,10 @@ const mockImportData = [
     col4: "オフィス費",
     col5: 100000,
     col6: "5月オフィス費",
+    col7: "不動産会社C",
+    col8: "",
+    col9: "総務部",
+    col10: "年間契約",
   },
 ]
 
@@ -68,6 +88,10 @@ const columnOptions = [
   { value: "category", label: "カテゴリ" },
   { value: "amount", label: "金額" },
   { value: "description", label: "説明" },
+  { value: "payee", label: "支払先" },
+  { value: "project", label: "プロジェクト" },
+  { value: "assignedTo", label: "担当者" },
+  { value: "notes", label: "備考" },
   { value: "ignore", label: "無視" },
 ]
 
@@ -79,6 +103,10 @@ export function CostImportForm() {
     col4: "category",
     col5: "amount",
     col6: "description",
+    col7: "payee",
+    col8: "project",
+    col9: "assignedTo",
+    col10: "notes",
   })
   const [importStatus, setImportStatus] = useState<"idle" | "validating" | "importing" | "success" | "error">("idle")
   const [validationErrors, setValidationErrors] = useState<string[]>([])
@@ -173,7 +201,7 @@ export function CostImportForm() {
 
         <div className="space-y-2">
           <div className="text-sm font-medium">列マッピング設定</div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-5 gap-4">
             {Object.keys(columnMapping).map((column) => (
               <div key={column} className="space-y-1">
                 <Label htmlFor={`mapping-${column}`}>列 {column.replace("col", "")}</Label>
@@ -233,7 +261,8 @@ export function CostImportForm() {
             </li>
             <li>費用種別に応じて適切なカテゴリを設定してください。</li>
             <li>金額は正の値で入力してください。</li>
-            <li>説明は省略可能です。</li>
+            <li>説明は必須項目です。</li>
+            <li>支払先、プロジェクト、担当者、備考は任意項目です。</li>
           </ul>
         </div>
       </CardContent>
