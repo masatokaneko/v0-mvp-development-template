@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -14,10 +14,18 @@ import { AlertCircle, Loader2 } from "lucide-react"
 import { ProductType } from "@prisma/client"
 import { createDealItem } from "@/app/actions/deal-item-actions"
 
-export function CreateDealItemForm() {
+// SearchParamsを使用するコンポーネントをラップするためのコンポーネント
+function CreateDealItemFormWithSearchParams() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const dealId = searchParams.get("dealId")
+
+  return <CreateDealItemFormInner initialDealId={dealId} />
+}
+
+// 内部コンポーネント
+function CreateDealItemFormInner({ initialDealId }: { initialDealId: string | null }) {
+  const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -116,7 +124,7 @@ export function CreateDealItemForm() {
             <Label htmlFor="dealId">
               商談 <span className="text-red-500">*</span>
             </Label>
-            <Select name="dealId" defaultValue={dealId || undefined} required>
+            <Select name="dealId" defaultValue={initialDealId || undefined} required>
               <SelectTrigger id="dealId" className={fieldErrors.dealId ? "border-red-500" : ""}>
                 <SelectValue placeholder="商談を選択" />
               </SelectTrigger>
@@ -259,5 +267,14 @@ export function CreateDealItemForm() {
         </CardFooter>
       </form>
     </Card>
+  )
+}
+
+// エクスポートするメインコンポーネント
+export function CreateDealItemForm() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateDealItemFormWithSearchParams />
+    </Suspense>
   )
 }

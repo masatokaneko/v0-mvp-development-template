@@ -8,17 +8,6 @@ export const prisma =
   globalForPrisma.prisma ||
   (() => {
     try {
-      // Prisma Client が存在するかチェック
-      try {
-        require(".prisma/client")
-      } catch (e) {
-        console.warn("Prisma Client is not generated. Running prisma generate...")
-        // 開発環境の場合は警告を表示するだけ
-        if (process.env.NODE_ENV === "development") {
-          console.warn("This is expected during build time. Prisma Client will be generated.")
-        }
-      }
-
       const client = new PrismaClient({
         log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
       })

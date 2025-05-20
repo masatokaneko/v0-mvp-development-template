@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { CreateDealItemForm } from "@/components/deal-items/create-deal-item-form"
 
 export const metadata: Metadata = {
@@ -12,7 +13,9 @@ export default function NewDealItemPage() {
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">新規契約アイテム登録</h2>
       </div>
-      <CreateDealItemForm />
+      <Suspense fallback={<div>Loading form...</div>}>
+        <CreateDealItemForm />
+      </Suspense>
     </div>
   )
 }
