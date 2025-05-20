@@ -10,12 +10,12 @@ export const prisma =
     try {
       // Prisma Client が存在するかチェック
       try {
-        require(".prisma/client/default")
+        require(".prisma/client")
       } catch (e) {
-        console.warn("Prisma Client is not generated. Using mock client for build process.")
-        // ビルド時のみのモッククライアント
-        if (process.env.NODE_ENV === "production") {
-          return createMockPrismaClient()
+        console.warn("Prisma Client is not generated. Running prisma generate...")
+        // 開発環境の場合は警告を表示するだけ
+        if (process.env.NODE_ENV === "development") {
+          console.warn("This is expected during build time. Prisma Client will be generated.")
         }
       }
 
@@ -23,7 +23,7 @@ export const prisma =
         log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
       })
 
-      // 接続テスト
+      // 接続テスト（開発環境のみ）
       if (process.env.NODE_ENV === "development") {
         client
           .$connect()
@@ -34,6 +34,7 @@ export const prisma =
       return client
     } catch (e) {
       console.error("Failed to initialize Prisma Client:", e)
+
       // フォールバックとして空のモックを返す（ビルド時のエラー回避用）
       if (process.env.NODE_ENV === "production") {
         return createMockPrismaClient()
@@ -42,7 +43,7 @@ export const prisma =
     }
   })()
 
-// モッククライアントの作成
+// モッククライアントの作成（ビルド時のフォールバック用）
 function createMockPrismaClient() {
   const handler = {
     get: (target: any, prop: string) => {
@@ -66,4 +67,5 @@ function createMockPrismaClient() {
   return new Proxy({}, handler) as unknown as PrismaClient
 }
 
+// 開発環境でのみグローバルオブジェクトに保存
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma

@@ -9,8 +9,14 @@ async function testConnection() {
     console.log("Database connection successful!")
 
     // 簡単なクエリを実行してテスト
-    const count = await prisma.budget.count()
-    console.log(`Budget count: ${count}`)
+    const customerCount = await prisma.customer.count()
+    console.log(`Customer count: ${customerCount}`)
+
+    const dealCount = await prisma.deal.count()
+    console.log(`Deal count: ${dealCount}`)
+
+    const dealItemCount = await prisma.dealItem.count()
+    console.log(`Deal item count: ${dealItemCount}`)
 
     await prisma.$disconnect()
     process.exit(0)
