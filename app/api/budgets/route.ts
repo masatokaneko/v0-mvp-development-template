@@ -9,6 +9,12 @@ import { Decimal } from "decimal.js"
  */
 export async function GET(request: NextRequest) {
   try {
+    // Prisma Client が利用可能かチェック
+    if (!prisma || typeof prisma.budget?.findMany !== "function") {
+      console.error("Prisma Client is not properly initialized")
+      return NextResponse.json({ error: "Database connection error" }, { status: 500 })
+    }
+
     const { searchParams } = new URL(request.url)
 
     // クエリパラメータの取得
@@ -54,6 +60,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(budgets)
   } catch (error) {
+    console.error("Error in budgets API:", error)
     return handleApiError(error)
   }
 }
@@ -63,6 +70,12 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    // Prisma Client が利用可能かチェック
+    if (!prisma || typeof prisma.budget?.create !== "function") {
+      console.error("Prisma Client is not properly initialized")
+      return NextResponse.json({ error: "Database connection error" }, { status: 500 })
+    }
+
     const data = await request.json()
 
     // バリデーション
@@ -100,6 +113,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(budget, { status: 201 })
   } catch (error) {
+    console.error("Error in budgets API:", error)
     return handleApiError(error)
   }
 }

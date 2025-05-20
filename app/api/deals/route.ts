@@ -8,6 +8,12 @@ import { DealType } from "@prisma/client"
  */
 export async function GET() {
   try {
+    // Prisma Client が利用可能かチェック
+    if (!prisma || typeof prisma.deal?.findMany !== "function") {
+      console.error("Prisma Client is not properly initialized")
+      return NextResponse.json({ error: "Database connection error" }, { status: 500 })
+    }
+
     const deals = await prisma.deal.findMany({
       include: {
         customer: true,
@@ -19,6 +25,7 @@ export async function GET() {
 
     return NextResponse.json(deals)
   } catch (error) {
+    console.error("Error in deals API:", error)
     return handleApiError(error)
   }
 }
@@ -28,6 +35,12 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
+    // Prisma Client が利用可能かチェック
+    if (!prisma || typeof prisma.deal?.create !== "function") {
+      console.error("Prisma Client is not properly initialized")
+      return NextResponse.json({ error: "Database connection error" }, { status: 500 })
+    }
+
     const data = await request.json()
 
     // バリデーション
@@ -58,6 +71,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(deal, { status: 201 })
   } catch (error) {
+    console.error("Error in deals API:", error)
     return handleApiError(error)
   }
 }
