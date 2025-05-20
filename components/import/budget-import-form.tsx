@@ -12,63 +12,7 @@ import { formatCurrency } from "@/lib/utils"
 import { BudgetType, ProductType } from "@prisma/client"
 
 // モックデータ
-const mockImportData = [
-  {
-    id: 1,
-    col1: "2024",
-    col2: "1",
-    col3: null,
-    col4: "SALES",
-    col5: null,
-    col6: "LICENSE",
-    col7: 800000,
-    col8: "1月ライセンス売上予算",
-  },
-  {
-    id: 2,
-    col1: "2024",
-    col2: "2",
-    col3: null,
-    col4: "SALES",
-    col5: null,
-    col6: "SERVICE",
-    col7: 850000,
-    col8: "2月サービス売上予算",
-  },
-  {
-    id: 3,
-    col1: "2024",
-    col2: null,
-    col3: "1",
-    col4: "COST_OF_SALES",
-    col5: "ライセンス原価",
-    col6: null,
-    col7: 240000,
-    col8: "Q1ライセンス原価予算",
-  },
-  {
-    id: 4,
-    col1: "2024",
-    col2: null,
-    col3: "2",
-    col4: "COST_OF_SALES",
-    col5: "サービス原価",
-    col6: null,
-    col7: 180000,
-    col8: "Q2サービス原価予算",
-  },
-  {
-    id: 5,
-    col1: "2024",
-    col2: null,
-    col3: null,
-    col4: "OPERATING_PROFIT",
-    col5: null,
-    col6: null,
-    col7: 3600000,
-    col8: "年間営業利益予算",
-  },
-]
+const mockImportData = []
 
 // 列マッピングオプション
 const columnOptions = [

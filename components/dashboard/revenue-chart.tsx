@@ -57,39 +57,16 @@ export function RevenueChart() {
   const [periodType, setPeriodType] = useState<PeriodType>("monthly")
   const [data, setData] = useState<RevenueSummary[]>([])
 
-  // モックデータを生成する関数
+  // モックデータを生成する関数を修正し、データが無い場合のガード処理を追加
   const generateMockData = (type: PeriodType) => {
-    if (type === "monthly") {
-      // 月次データ（直近6ヶ月）
-      return [
-        { period: "12月", license: 800000, service: 400000, total: 1200000, budget: 1200000 },
-        { period: "1月", license: 850000, service: 450000, total: 1300000, budget: 1250000 },
-        { period: "2月", license: 900000, service: 500000, total: 1400000, budget: 1300000 },
-        { period: "3月", license: 950000, service: 550000, total: 1500000, budget: 1350000 },
-        { period: "4月", license: 1000000, service: 600000, total: 1600000, budget: 1400000 },
-        { period: "5月", license: 1050000, service: 650000, total: 1700000, budget: 1450000 },
-      ]
-    } else if (type === "quarterly") {
-      // 四半期データ（直近4四半期）
-      return [
-        { period: "Q2 FY2023", license: 2400000, service: 1200000, total: 3600000, budget: 3500000 },
-        { period: "Q3 FY2023", license: 2600000, service: 1300000, total: 3900000, budget: 3700000 },
-        { period: "Q4 FY2023", license: 2800000, service: 1400000, total: 4200000, budget: 4000000 },
-        { period: "Q1 FY2024", license: 3000000, service: 1500000, total: 4500000, budget: 4300000 },
-      ]
-    } else {
-      // 年次データ（直近3年）
-      return [
-        { period: "FY2022", license: 9000000, service: 4500000, total: 13500000, budget: 13000000 },
-        { period: "FY2023", license: 10000000, service: 5000000, total: 15000000, budget: 14500000 },
-        { period: "FY2024", license: 11000000, service: 5500000, total: 16500000, budget: 16000000 },
-      ]
-    }
+    // 実際のAPIから取得するように変更する場合はここを修正
+    return []
   }
 
-  // 期間タイプが変更されたときにデータを更新
+  // useEffectの中にデータが空の場合のガード処理を追加
   useEffect(() => {
-    setData(generateMockData(periodType))
+    const data = generateMockData(periodType)
+    setData(data.length > 0 ? data : [])
   }, [periodType])
 
   return (

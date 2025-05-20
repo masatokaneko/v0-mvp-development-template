@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { formatCurrency, formatPercent } from "@/lib/utils"
-import { Decimal } from "decimal.js"
+import type { Decimal } from "decimal.js"
 
 // 予実比較の項目タイプ
 type ComparisonItemType = "sales" | "costs" | "profits"
@@ -26,83 +26,10 @@ export function BudgetActualComparison() {
   const [periodType, setPeriodType] = useState<ComparisonPeriodType>("monthly")
   const [comparisonData, setComparisonData] = useState<ComparisonItem[]>([])
 
-  // モックデータを生成
+  // モックデータを生成する関数を修正し、データが無い場合のガード処理を追加
   const generateMockData = (itemType: ComparisonItemType, periodType: ComparisonPeriodType) => {
     // 実際のAPIから取得する場合はここで非同期処理
-
-    if (itemType === "sales") {
-      return [
-        {
-          label: "ライセンス売上",
-          actual: new Decimal(1050000),
-          budget: new Decimal(1000000),
-          variance: new Decimal(50000),
-          achievementRate: new Decimal(105),
-        },
-        {
-          label: "サービス売上",
-          actual: new Decimal(650000),
-          budget: new Decimal(600000),
-          variance: new Decimal(50000),
-          achievementRate: new Decimal(108.3),
-        },
-        {
-          label: "売上合計",
-          actual: new Decimal(1700000),
-          budget: new Decimal(1600000),
-          variance: new Decimal(100000),
-          achievementRate: new Decimal(106.3),
-        },
-      ]
-    } else if (itemType === "costs") {
-      return [
-        {
-          label: "ライセンス原価",
-          actual: new Decimal(250000),
-          budget: new Decimal(300000),
-          variance: new Decimal(-50000),
-          achievementRate: new Decimal(83.3),
-        },
-        {
-          label: "サービス原価",
-          actual: new Decimal(190000),
-          budget: new Decimal(240000),
-          variance: new Decimal(-50000),
-          achievementRate: new Decimal(79.2),
-        },
-        {
-          label: "販管費",
-          actual: new Decimal(720000),
-          budget: new Decimal(700000),
-          variance: new Decimal(20000),
-          achievementRate: new Decimal(102.9),
-        },
-        {
-          label: "費用合計",
-          actual: new Decimal(1160000),
-          budget: new Decimal(1240000),
-          variance: new Decimal(-80000),
-          achievementRate: new Decimal(93.5),
-        },
-      ]
-    } else {
-      return [
-        {
-          label: "売上総利益",
-          actual: new Decimal(540000),
-          budget: new Decimal(460000),
-          variance: new Decimal(80000),
-          achievementRate: new Decimal(117.4),
-        },
-        {
-          label: "営業利益",
-          actual: new Decimal(540000),
-          budget: new Decimal(460000),
-          variance: new Decimal(80000),
-          achievementRate: new Decimal(117.4),
-        },
-      ]
-    }
+    return []
   }
 
   // タブ切り替え時にデータを更新
@@ -116,9 +43,10 @@ export function BudgetActualComparison() {
     setComparisonData(generateMockData(itemType, value as ComparisonPeriodType))
   }
 
-  // 初期データ設定
+  // 初期データ設定にガード処理を追加
   useState(() => {
-    setComparisonData(generateMockData(itemType, periodType))
+    const data = generateMockData(itemType, periodType)
+    setComparisonData(data.length > 0 ? data : [])
   })
 
   return (

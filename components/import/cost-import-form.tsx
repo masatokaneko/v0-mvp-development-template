@@ -12,73 +12,7 @@ import { formatCurrency } from "@/lib/utils"
 import { CostType } from "@prisma/client"
 
 // モックデータ
-const mockImportData = [
-  {
-    id: 1,
-    col1: "2024",
-    col2: "1",
-    col3: "COST_OF_SALES_LICENSE",
-    col4: "ライセンス原価",
-    col5: 200000,
-    col6: "1月ライセンス原価",
-    col7: "ベンダーA",
-    col8: "プロジェクトX",
-    col9: "経理部",
-    col10: "四半期契約",
-  },
-  {
-    id: 2,
-    col1: "2024",
-    col2: "2",
-    col3: "COST_OF_SALES_LICENSE",
-    col4: "ライセンス原価",
-    col5: 220000,
-    col6: "2月ライセンス原価",
-    col7: "ベンダーA",
-    col8: "プロジェクトX",
-    col9: "経理部",
-    col10: "四半期契約",
-  },
-  {
-    id: 3,
-    col1: "2024",
-    col2: "3",
-    col3: "COST_OF_SALES_SERVICE",
-    col4: "サービス原価",
-    col5: 170000,
-    col6: "3月サービス原価",
-    col7: "ベンダーB",
-    col8: "プロジェクトY",
-    col9: "開発部",
-    col10: "単発契約",
-  },
-  {
-    id: 4,
-    col1: "2024",
-    col2: "4",
-    col3: "SG_AND_A",
-    col4: "人件費",
-    col5: 500000,
-    col6: "4月人件費",
-    col7: "",
-    col8: "",
-    col9: "人事部",
-    col10: "月次固定",
-  },
-  {
-    id: 5,
-    col1: "2024",
-    col2: "5",
-    col3: "SG_AND_A",
-    col4: "オフィス費",
-    col5: 100000,
-    col6: "5月オフィス費",
-    col7: "不動産会社C",
-    col8: "",
-    col9: "総務部",
-    col10: "年間契約",
-  },
-]
+const mockImportData = []
 
 // 列マッピングオプション
 const columnOptions = [
