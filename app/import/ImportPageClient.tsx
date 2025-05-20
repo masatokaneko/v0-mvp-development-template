@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileUpload } from "@/components/import/file-upload"
 import { DealImportForm } from "@/components/import/deal-import-form"
 import { DealItemImportForm } from "@/components/import/deal-item-import-form"
+import { BudgetImportForm } from "@/components/import/budget-import-form"
+import { CostImportForm } from "@/components/import/cost-import-form"
 import { useEffect, useState } from "react"
 
 export default function ImportPageClient() {
@@ -14,7 +16,7 @@ export default function ImportPageClient() {
   // URLパラメータからタブを設定
   useEffect(() => {
     const type = searchParams.get("type")
-    if (type === "deals" || type === "dealItems") {
+    if (type === "deals" || type === "dealItems" || type === "budgets" || type === "costs") {
       setActiveTab(type)
     }
   }, [searchParams])
@@ -27,13 +29,15 @@ export default function ImportPageClient() {
 
       <div className="space-y-4">
         <p className="text-muted-foreground">
-          Excelファイルから商談データや契約アイテムデータをインポートします。テンプレートに従ってデータを準備してください。
+          Excelファイルから各種データをインポートします。テンプレートに従ってデータを準備してください。
         </p>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="deals">商談インポート</TabsTrigger>
-            <TabsTrigger value="dealItems">契約アイテムインポート</TabsTrigger>
+          <TabsList className="grid w-full max-w-md grid-cols-4">
+            <TabsTrigger value="deals">商談</TabsTrigger>
+            <TabsTrigger value="dealItems">契約アイテム</TabsTrigger>
+            <TabsTrigger value="budgets">予算</TabsTrigger>
+            <TabsTrigger value="costs">費用実績</TabsTrigger>
           </TabsList>
           <TabsContent value="deals" className="space-y-4 pt-4">
             <FileUpload
@@ -52,6 +56,24 @@ export default function ImportPageClient() {
               maxFileSize={5}
             />
             <DealItemImportForm />
+          </TabsContent>
+          <TabsContent value="budgets" className="space-y-4 pt-4">
+            <FileUpload
+              title="予算データのインポート"
+              description="予算データのExcelファイルをアップロードしてください。"
+              acceptedFileTypes=".xlsx,.xls,.csv"
+              maxFileSize={5}
+            />
+            <BudgetImportForm />
+          </TabsContent>
+          <TabsContent value="costs" className="space-y-4 pt-4">
+            <FileUpload
+              title="費用実績データのインポート"
+              description="費用実績データのExcelファイルをアップロードしてください。"
+              acceptedFileTypes=".xlsx,.xls,.csv"
+              maxFileSize={5}
+            />
+            <CostImportForm />
           </TabsContent>
         </Tabs>
       </div>
