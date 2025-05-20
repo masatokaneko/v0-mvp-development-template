@@ -20,7 +20,7 @@ model Customer {
 }
 
 model Product {
-  id          String      @id @default(cuid())
+  id          String      @id
   name        String
   type        ProductType
   description String?
@@ -30,7 +30,7 @@ model Product {
 }
 
 model Deal {
-  id            String    @id @default(cuid())
+  id            String    @id
   name          String
   customer      Customer  @relation(fields: [customerId], references: [id])
   customerId    String

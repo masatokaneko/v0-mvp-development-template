@@ -6,13 +6,26 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { FileUpload } from "@/components/import/file-upload"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, Download, Upload } from "lucide-react"
+import { AlertCircle, Download, Trash2, Upload } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export function DataManagementSettings() {
   const [isExporting, setIsExporting] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
   const [isBackingUp, setIsBackingUp] = useState(false)
   const [isRestoring, setIsRestoring] = useState(false)
+  const [isClearing, setIsClearing] = useState(false)
+  const [showClearDialog, setShowClearDialog] = useState(false)
+  const [clearConfirmation, setClearConfirmation] = useState("")
 
   const handleExportData = async () => {
     setIsExporting(true)
@@ -82,6 +95,38 @@ export function DataManagementSettings() {
 
     toast.success("バックアップからの復元が完了しました")
     setIsRestoring(false)
+  }
+
+  const handleClearData = async () => {
+    if (clearConfirmation !== "データクリア") {
+      toast.error("確認テキストが正しくありません")
+      return
+    }
+
+    setIsClearing(true)
+    setShowClearDialog(false)
+
+    try {
+      const response = await fetch("/api/data/clear", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error("データのクリアに失敗しました")
+      }
+
+      const result = await response.json()
+      toast.success(`データのクリアが完了しました。${result.totalDeleted}件のレコードが削除されました。`)
+    } catch (error) {
+      console.error("データクリアエラー:", error)
+      toast.error("データのクリアに失敗しました")
+    } finally {
+      setIsClearing(false)
+      setClearConfirmation("")
+    }
   }
 
   return (
@@ -171,6 +216,67 @@ export function DataManagementSettings() {
           </div>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>データのクリア</CardTitle>
+          <CardDescription>すべてのデータを削除します</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            この操作を実行すると、すべてのデータ（商談、契約アイテム、顧客、商品、費用、予算）が削除されます。
+            この操作は元に戻すことができません。操作前に必ずデータのバックアップを取ることをお勧めします。
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Button
+            variant="destructive"
+            onClick={() => setShowClearDialog(true)}
+            disabled={isClearing}
+            className="flex items-center gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            {isClearing ? "クリア中..." : "すべてのデータをクリア"}
+          </Button>
+        </CardFooter>
+      </Card>
+
+      <Dialog open={showClearDialog} onOpenChange={setShowClearDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>データクリアの確認</DialogTitle>
+            <DialogDescription>
+              この操作を実行すると、すべてのデータが削除されます。この操作は元に戻すことができません。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>警告</AlertTitle>
+              <AlertDescription>
+                すべてのデータが完全に削除されます。この操作は元に戻すことができません。
+              </AlertDescription>
+            </Alert>
+            <div className="space-y-2">
+              <Label htmlFor="confirmation">確認のため「データクリア」と入力してください</Label>
+              <Input
+                id="confirmation"
+                value={clearConfirmation}
+                onChange={(e) => setClearConfirmation(e.target.value)}
+                placeholder="データクリア"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowClearDialog(false)}>
+              キャンセル
+            </Button>
+            <Button variant="destructive" onClick={handleClearData} disabled={clearConfirmation !== "データクリア"}>
+              データをクリア
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

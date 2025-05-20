@@ -45,8 +45,9 @@ export async function POST(request: NextRequest) {
 
     // バリデーション
     validateData(data, {
+      id: validators.required("商談ID"),
       name: validators.required("商談名"),
-      customerId: validators.required("顧客ID"),
+      customerName: validators.required("顧客名"),
       dealDate: validators.isDate("商談日"),
       fiscalYear: validators.isNumber("会計年度"),
       fiscalQuarter: validators.isNumber("四半期"),
@@ -58,10 +59,27 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // 顧客の存在確認または作成
+    let customer = await prisma.customer.findFirst({
+      where: {
+        name: data.customerName,
+      },
+    })
+
+    if (!customer) {
+      customer = await prisma.customer.create({
+        data: {
+          name: data.customerName,
+        },
+      })
+    }
+
+    // 商談の作成（IDを指定）
     const deal = await prisma.deal.create({
       data: {
+        id: data.id,
         name: data.name,
-        customerId: data.customerId,
+        customerId: customer.id,
         dealDate: new Date(data.dealDate),
         fiscalYear: data.fiscalYear,
         fiscalQuarter: data.fiscalQuarter,

@@ -58,3 +58,6 @@ function createMockPrismaClient() {
 
 // 開発環境でのみグローバルオブジェクトに保存
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
+
+// デフォルトエクスポートを追加
+export default prisma

@@ -56,38 +56,35 @@ export async function GET(request: NextRequest, { params }: { params: { type: st
 function setupDealsTemplate(worksheet: ExcelJS.Worksheet) {
   // ヘッダー行の設定
   worksheet.columns = [
-    { header: "商談名", key: "dealName", width: 30 },
+    { header: "商談ID", key: "id", width: 15 },
+    { header: "商談名", key: "name", width: 30 },
     { header: "顧客名", key: "customerName", width: 20 },
     { header: "商談日", key: "dealDate", width: 15 },
-    { header: "種別", key: "type", width: 15 },
     { header: "会計年度", key: "fiscalYear", width: 15 },
     { header: "四半期", key: "fiscalQuarter", width: 15 },
-    { header: "担当者", key: "assignedTo", width: 15 },
-    { header: "備考", key: "notes", width: 30 },
+    { header: "種別", key: "type", width: 15 },
   ]
 
   // サンプルデータの追加
   worksheet.addRow({
-    dealName: "2023年度システム開発案件",
+    id: "DEAL-001",
+    name: "2023年度システム開発案件",
     customerName: "サンプル株式会社",
     dealDate: "2023-04-01",
-    type: "LICENSE",
     fiscalYear: "2023",
-    fiscalQuarter: "Q1",
-    assignedTo: "山田太郎",
-    notes: "初回商談済み、見積もり提出待ち",
+    fiscalQuarter: "1",
+    type: "LICENSE",
   })
 
   // 説明行の追加
   worksheet.addRow({
-    dealName: "※必須",
-    customerName: "※必須",
+    id: "※必須（一意の識別子）",
+    name: "※必須",
+    customerName: "※必須（既存の顧客名または新規顧客）",
     dealDate: "※必須（YYYY-MM-DD）",
-    type: "※必須（LICENSE/SERVICE/HARDWARE等）",
     fiscalYear: "※必須（数値）",
-    fiscalQuarter: "※必須（Q1/Q2/Q3/Q4）",
-    assignedTo: "※任意",
-    notes: "※任意",
+    fiscalQuarter: "※必須（1-4）",
+    type: "※必須（LICENSE/SERVICE/MIXED）",
   })
 }
 
@@ -96,46 +93,37 @@ function setupDealItemsTemplate(worksheet: ExcelJS.Worksheet) {
   // ヘッダー行の設定
   worksheet.columns = [
     { header: "商談ID", key: "dealId", width: 15 },
+    { header: "商品ID", key: "productId", width: 15 },
     { header: "商品名", key: "productName", width: 20 },
     { header: "種別", key: "type", width: 15 },
-    { header: "数量", key: "quantity", width: 10 },
-    { header: "単価", key: "unitPrice", width: 15 },
-    { header: "税率", key: "taxRate", width: 10 },
     { header: "税前金額", key: "amountBeforeTax", width: 15 },
     { header: "税後金額", key: "amountAfterTax", width: 15 },
     { header: "開始日", key: "startDate", width: 15 },
     { header: "終了日", key: "endDate", width: 15 },
-    { header: "備考", key: "notes", width: 30 },
   ]
 
   // サンプルデータの追加
   worksheet.addRow({
     dealId: "DEAL-001",
+    productId: "PROD-001",
     productName: "システム開発サービス",
     type: "SERVICE",
-    quantity: 1,
-    unitPrice: 3000000,
-    taxRate: 0.1,
     amountBeforeTax: 3000000,
     amountAfterTax: 3300000,
     startDate: "2023-04-01",
     endDate: "2023-09-30",
-    notes: "初期開発費用",
   })
 
   // 説明行の追加
   worksheet.addRow({
     dealId: "※必須（既存の商談ID）",
+    productId: "※必須（既存の商品IDまたは新規商品）",
     productName: "※必須",
-    type: "※必須（LICENSE/SERVICE/HARDWARE等）",
-    quantity: "※必須（数値）",
-    unitPrice: "※必須（数値）",
-    taxRate: "※必須（0.1 = 10%）",
-    amountBeforeTax: "※税前金額 = 数量 × 単価",
-    amountAfterTax: "※税後金額 = 税前金額 × (1 + 税率)",
+    type: "※必須（LICENSE/SERVICE）",
+    amountBeforeTax: "※必須（数値）",
+    amountAfterTax: "※必須（数値）",
     startDate: "※必須（YYYY-MM-DD）日割り計算に使用",
     endDate: "※必須（YYYY-MM-DD）日割り計算に使用",
-    notes: "※任意",
   })
 }
 

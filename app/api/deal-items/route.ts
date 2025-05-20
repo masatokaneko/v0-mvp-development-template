@@ -65,9 +65,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // 商品の存在確認または作成
+    let product = await prisma.product.findFirst({
+      where: {
+        id: data.productId,
+      },
+    })
+
+    if (!product) {
+      product = await prisma.product.create({
+        data: {
+          id: data.productId,
+          name: data.productName,
+          type: data.type,
+        },
+      })
+    }
+
     // トランザクションを使用して契約アイテムと月次按分売上を一緒に作成
     const dealItem = await prisma.$transaction(async (tx) => {
-      // 契約アイテムを作成
+      // 契約アイテムを作成（IDは自動採番）
       const newDealItem = await tx.dealItem.create({
         data: {
           dealId: data.dealId,
